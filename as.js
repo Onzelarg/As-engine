@@ -648,6 +648,13 @@ var toDraw;
 var mouseX;
 var mouseY;
 
+/**
+ * Starts the engine. The engine will look for a draw function to run. 
+ * @param {Number} width - width for the canvas to create
+ * @param {Number} height - height for the canvas to create
+ * @param {Number} id - [optional] id of the canvas
+ * @param {Number} reset - [optional] deletes the current canvas and creates a new one
+ */
 const setup = function(width,height,id,reset) {
     engine=new asEngine(width,height,id,reset);
     canvases[0]=engine.foreground;
@@ -656,24 +663,44 @@ const setup = function(width,height,id,reset) {
     add_event('mousemove',engine.mouse_position);
 }
 
+/**
+ * Starts the engine. The engine will look for a draw function to run. 
+ */
 const start=function(){
     engine.start();
 }
 
+/**
+ * Stops the engine.
+ */
 const stop=function(){
     engine.stop();
 }
 
+/**
+ * Sets the framerate for the engine. 
+ * @param {Number} fr - amount for frame for seconds
+ */
 const framerate=function(fr){
     engine.get_framerate(fr);
 }
 
+/**
+ * Clears the canvas
+ * @param {Number} id - [optional] id of the canvas
+ */
 const clear = function(id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].clear();  
 }
 
+/**
+ * Translates (moves) the center of the canvas. Default 0,0 is the top right corner. 
+ * @param {Number} x - amount to move horizontally
+ * @param {Number} y - amount to move vertically
+ * @param {Number} id - [optional] id of the canvas
+ */
 const translate=function(x,y,id){
     if(!id) id=0;
     if(id=="background") id=1;
@@ -684,22 +711,43 @@ const translate=function(x,y,id){
     }
 }
 
+/**
+ * Rotates the canvas
+ * @param {Number} angle - angle to rotate the canvas
+ * @param {Number} id - [optional] id of the canvas
+ */
 const rotate=function(angle,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].rotate(angle); 
 }
 
+/**
+ * Begins a path to draw to the canvas. X and Y is the starting position. Nothing is drawn yet.
+ * @param {Number} x - starting x position
+ * @param {Number} y - starting y position
+ * @param {Number} id - [optional] id of the canvas
+ */
 const beginPath=function(x,y,id){ 
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].beginPath(x,y)
 }
+/**
+ * Adds a new point to the path. It will also draw a line to it. 
+ * @param {Number} x - next x position
+ * @param {Number} y - next y position
+ * @param {Number} id - [optional] id of the canvas
+ */
 const addPoint_toPath=function(x,y,id){ 
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].addPoint_toPath(x,y);
 }
+/**
+ * Ends the path 
+ * @param {Number} id - [optional] id of the canvas
+ */
 const closePath=function(id){
     if(!id) id=0;
     if(id=="background") id=1;
@@ -722,36 +770,91 @@ const line = function(fromX,fromY,toX,toY,lineWidth,color,id){
     canvases[id].line(fromX,fromY,toX,toY,lineWidth,color);
 }
 
+/**
+ * Draw a circle on the canvas.
+ * @param {Number} x - Starting X position
+ * @param {Number} y - Starting Y position
+ * @param {Number} radius - Radius of the circle
+ * @param {Number} lineWidth - [optional] Linewidth for stroke 
+ * @param {Number} startAngle - [optional] starting angle for circle
+ * @param {Number} endAngle - [optional] end angle for circle
+ * @param {string} color - [optional] color for the line
+ * @param {Number} id - [optional] id of the canvas
+ */
 const circle= function(x,y,radius,lineWidth,startAngle,endAngle,color,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].circle(x,y,radius,lineWidth,startAngle,endAngle,color);  
 }
 
+/**
+ * Draw an ellipse on the canvas.
+ * @param {Number} x - Starting X position
+ * @param {Number} y - Starting Y position
+ * @param {Number} radiusX - Radius X of the ellipse
+ * @param {Number} radiusY - Radius Y of the ellipse
+ * @param {Number} rotation - [optional] rotation around the center
+ * @param {Number} lineWidth - [optional] Linewidth for stroke 
+ * @param {string} color - [optional] color for the line
+ * @param {Number} startAngle - [optional] starting angle for circle
+ * @param {Number} endAngle - [optional] end angle for circle
+ * @param {Number} id - [optional] id of the canvas
+ */
 const ellipse = function(x,y,radiusX,radiusY,rotation,lineWidth,color,startAngle,endAngle,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].circle(x,y,radiusX,radiusY,rotation,lineWidth,color,startAngle,endAngle); 
 }
 
-const rectangle = function(x,y,width,height){
+/**
+ * Draw a rectangle on the canvas.
+ * @param {Number} x - Starting X position
+ * @param {Number} y - Starting Y position
+ * @param {Number} width - Width of the rectangle
+ * @param {Number} height - Height of the rectangle
+ * @param {Number} id - [optional] id of the canvas
+ */
+const rectangle = function(x,y,width,height,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].rectangle(x,y,width,height); 
 }
 
+/**
+ * Draw a triangle on the canvas. Does not check if the triangle is correct.
+ * @param {Number} x1 - Triangle X1 position
+ * @param {Number} y1 - Triangle Y1 position
+ * @param {Number} x2 - Triangle X2 position
+ * @param {Number} y2 - Triangle Y2 position
+ * @param {Number} x3 - Triangle X3 position
+ * @param {Number} y3 - Triangle Y3 position
+ * @param {Number} lineWidth - [optional] Linewidth for stroke 
+ * @param {string} color - [optional] color for the line
+ * @param {Number} id - [optional] id of the canvas
+ */
 const triangle=function(x1,y1,x2,y2,x3,y3,lineWidth,color,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].triangle(x1,y1,x2,y2,x3,y3,lineWidth,color);
 }
 
+/**
+ * Sets the background color of the canvas 
+ * @param {string} color - color to set
+ * @param {Number} id - [optional] id of the canvas
+ */
 const background= function(color,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].background(color);  
 }
 
+
+/**
+ * Sets the color for the stroke, also enables it
+ * @param {string} color - color to set
+ * @param {Number} id - [optional] id of the canvas
+ */
 const stroke= function(color,id){
     if(!id) id=0;
     if(id=="background") id=1;
@@ -759,10 +862,18 @@ const stroke= function(color,id){
     canvases[id].stroke(color);  
 }
 
+/**
+ * Disables stroke
+ */
 const noStroke= function(){
     _stroke=false;
 }
 
+/**
+ * Sets the color for the fill, also enables it
+ * @param {string} color - color to set
+ * @param {Number} id - [optional] id of the canvas
+ */
 const fill= function(color,id){
     if(!id) id=0;
     if(id=="background") id=1;
@@ -770,28 +881,55 @@ const fill= function(color,id){
     canvases[id].fill(color);  
 }
 
+/**
+ * Disables fill
+ */
 const noFill=function(){
     _fill=false;
 }
 
+/**
+ * Sets the linewidth (thickness)
+ * @param {Number} thickness - linewidth to set
+ * @param {Number} id - [optional] id of the canvas
+ */
 const lineWidth= function(thickness,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].lineWidth(thickness);
 }
 
+/**
+ * Sets linear gradient between x1,y1 and x2,y2
+ * @param {Number} x1 - start x position to set
+ * @param {Number} y1 - start y position to set
+ * @param {Number} x2 - end x position to set
+ * @param {Number} y2 - end y position to set
+ * @param {Number} id - [optional] id of the canvas
+ */
 const linearGradient=function(x1,y1,x2,y2,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].LinearGradient(x1,y1,x2,y2); 
 }
 
+/**
+ * Sets color stop to the gradient
+ * @param {Number} offset - The offset from the start between 0-1
+ * @param {string} color - color for the stop
+ * @param {Number} id - [optional] id of the canvas
+ */
 const add_colorStop=function(offset,color,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].gradient_addColorStop(offset,color); 
 }
 
+/**
+ * Sets alpha for the canvas. Only applies for the operations afterwards. 
+ * @param {Number} amount - The amount to set between 0-1
+ * @param {Number} id - [optional] id of the canvas
+ */
 const alpha=function(amount,id){
     if(!id) id=0;
     if(id=="background") id=1;
@@ -800,13 +938,24 @@ const alpha=function(amount,id){
 
 
 
-
+/**
+ * Resizes the canvas element. X and Y is in pixels
+ * @param {Number} x - width to set the canvas 
+ * @param {Number} x - height to set the canvas
+ * @param {Number} id - [optional] id of the canvas
+ */
 const resizeCanvas = function(x,y,id){
     if(!id) id=0;
     if(id=="background") id=1;
     canvases[id].resize(x,y);  
 }
 
+/**
+ * Adds an event listener to the canvas
+ * @param {string} type - the type of the event to add
+ * @param {string} fv - the function to fire in activation
+ * @param {Number} id - [optional] id of the canvas
+ */
 const add_event = function(type,fv,id){
     if(!id) id=0;
     if(id=="background") id=1;
@@ -823,7 +972,7 @@ const vector_mode = function(_mode){
 /**
  * Angle mode defines if calculations will happen in degrees or radians. 
  * Use keywords DEGREE or RADIANS to set. Default is degress.
- * @param {string} _mode 
+ * @param {string} _mode - Mode to enter. DEGREE or RADIANS is accepted
  */
 const angle_mode= function(_mode){
     let mode=_mode.toLowerCase();
@@ -833,6 +982,10 @@ const angle_mode= function(_mode){
     angleMode=mode;
 }
 
+/**
+ * Console.log code shortening 
+ * @param {string} str - string to console log 
+ */
 const log=function(str){
     console.log(str);
 }
