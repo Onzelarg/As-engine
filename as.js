@@ -1,6 +1,6 @@
 //import eCanvas from "../maze/as.js";
 // ********************************************************************************************************
-//													Constans
+//													Constants
 // ********************************************************************************************************
 const sqrt=Math.sqrt;
 const PI=Math.PI; 
@@ -40,20 +40,34 @@ class domElements {
 		this.parent.appendChild(result);
         this.element=document.getElementById(this.id);
         if(_class) this.add_class(_class);
-        if(str) this.inner(str);
+        if(str) this.innerhtml(str);
     }
     
-    
-    add_class(_class){
-        let attribute = document.createAttribute("class");
-        attribute.value=_class;
-        this.element.setAttributeNode(attribute);
+    /**
+     * Adds class to the element
+     * @param {String} _class - name of the class
+     * @param {boolean} overwrite - [optional] removes any other classes
+     */
+    add_class(_class,overwrite){
+        if (overwrite) { this.remove_class("",true); }
+        this.element.classList.add(_class);
     }
     
+    /**
+     * Adds event listener to the element
+     * @param {string} type - type of event to add 
+     * @param {Function} fv - the operation to do when the event fires
+     */
     add_event(type,fv){
 		this.element.addEventListener(type,fv);		
 	}
 	
+    /**
+     * Adds style to the element. Overwrite deletes all other stlye previously on the element.
+     * @param {string} style - name of the style
+     * @param {string} values - value of the style
+     * @param {boolean} overwrite - [optional] remove all previous styles
+     */
 	add_style(style,values,overwrite){
         if(!overwrite) overwrite=false;
         let styles="";
@@ -72,6 +86,11 @@ class domElements {
 		this.element.setAttributeNode(attribute);
 	}
     
+    /**
+     * Adds attribute to the element. Eg. width
+     * @param {string} _attribute - name of the attribute
+     * @param {string} values - value of the attribute
+     */
     add_attribute(_attribute,values){
         if(_attribute instanceof Array){
             for(let i=0;i<_attribute.length;i++){
@@ -86,26 +105,73 @@ class domElements {
         }
     }
     
+    /**
+     * Removes event listener from the element
+     * @param {string} type - type of event to remove 
+     * @param {string} fv - the operation to remove
+     */
     remove_event(type,fv){
         this.element.removeEventListener(type,fv);
     }
     
+    /**
+     * Removes a style from the element
+     * @param {string} style - name of the style element 
+     */
     remove_style(style){
         this.element.style.removeProperty(style);
         if(this.element.style.length==0) this.element.removeAttribute("style");
     }
     
-    remove_class(){
-        this.element.removeAttribute("class");    
+    /**
+     * Removes class from the element. Set all to true to remove all classes
+     * @param {string} _class - class name to remove
+     * @param {boolean} all - [optional] - remove all classes
+     */
+    remove_class(_class,all){
+        if(!all || all==null){
+            this.element.classList.remove(_class);  
+        }else{
+            let classes=this.element.classList.entries();
+            for (let i = 0; i < classes.length; i++) {
+                this.element.classList.remove(classes[i]); 
+            }
+        }
     }
     
+    /**
+     * Removes the element from the parent
+     */
     delete_element(){
 		this.parent.removeChild(document.getElementById(this.id));
 	}
 
-    inner(str,add){
-        if(!add){this.element.innerHTML+=str;}else{this.element.innerHTML=str;}
+    /**
+     * Adds innerHTML to the element. Set add to false to overwrite existing text
+     * @param {string} str - string to write 
+     * @param {boolean} add - [optional] overwrite the existing text
+     */
+    innerhtml(str,add){
+        if(add===true || add==null){this.element.innerHTML+=str;}else{this.element.innerHTML=str;}
     }
+
+    /**
+     * Adds innerText to the element. Set add to false to overwrite existing text
+     * @param {*} str - string to write 
+     * @param {*} add - [optional] overwrite the existing text
+     */
+    innertext(str,add){
+        if(add===true || add==null){this.element.innerText+=str;}else{this.element.innerText=str;}
+    }
+
+    /**
+     * Clears elements innerHTML
+     */
+    clearhtml(){ this.element.innerHTML=""; }
+    /**
+     * Clears elements innerText
+     */
+    cleartext(){ this.element.innerText=""; }
     
     resize(width,height){
         this.element.width=width;
@@ -114,6 +180,9 @@ class domElements {
         this.height=height;
     }
     
+    /**
+     * Hides the element
+     */
     hide(){
         let d="display";
         if(this.element.style.length==0){
@@ -123,6 +192,9 @@ class domElements {
         }   
     }
     
+    /**
+     * Shows the element
+     */
     show(){
         //display: block; display: none;
         if(this.element.style.length==0){
@@ -140,23 +212,40 @@ class domElements {
 // ************************************************************************************************************************
 class eDiv extends domElements{
     
+    /**
+     * Creates a new div element
+     * @param {string} id - id of the new div
+     * @param {string} parent - [optional] parent of the div. Default is body
+     * @param {string} str - [optional] innerHTML of the new div
+     * @param {string} _class - [optional] class of the new div
+     */
     constructor(id,parent,str,_class){
         let result=document.createElement('div');
         super(result,id,parent,str,_class);
     }
-    
-    
 
 }
 
 class eButton extends domElements {
     
+    /**
+     * Creates a new button
+     * @param {*} id  - id of the new button
+     * @param {*} parent - [optional] parent of the div. Default is body
+     * @param {*} str - [optional] text of the new button
+     * @param {*} _class - [optional] class of the new div
+     * @param {*} fv - [optional] function to fire in click event
+     */
     constructor(id,parent,str,_class,fv){
         let result=document.createElement('button');
         super(result,id,parent,str,_class);
         if(fv) this.add_event("click",fv);
     }
     
+    /**
+     * Adds onclick event to the button
+     * @param {string} fv - function to fire
+     */
     click(fv){
         this.add_event("click",fv);
     }
