@@ -19,16 +19,35 @@ const ANGLEMODE=0;
 //													AS
 // ********************************************************************************************************
 
+/**
+ * Math.sin code shortening
+ * @param {Number} angle - the angle to calculate the sin of
+ * @returns - returns the sin of the given angle
+ */
 const sin=function(angle){
     if(angleMode) angle=convert_toRadians(angle);
     return Math.sin(angle);
 }
 
+/**
+ * Math.cos code shortening
+ * @param {Number} angle - the angle to calculate the cos of
+ * @returns - returns the cos of the given angle
+ */
 const cos=function(angle){
     if(angleMode) angle=convert_toRadians(angle);
     return Math.cos(angle);
 }
 
+/**
+ * Document.getElementById code shortening
+ * @param {string} str - the id to search for
+ * @returns - returns the found element in the document.
+ */
+const getElementbyID=function(str){
+    let result=document.getElementById(str);
+    return result;
+}
 
 class domElements {
     
@@ -36,9 +55,9 @@ class domElements {
         this.parent = document.body;
         result.id=id;
         this.id=id;
-		if(parent) this.parent=document.getElementById(parent);
+		if(parent) this.parent=getElementbyID(parent);
 		this.parent.appendChild(result);
-        this.element=document.getElementById(this.id);
+        this.element=getElementbyID(this.id);
         if(_class) this.add_class(_class);
         if(str) this.innerhtml(str);
     }
@@ -143,7 +162,7 @@ class domElements {
      * Removes the element from the parent
      */
     delete_element(){
-		this.parent.removeChild(document.getElementById(this.id));
+		this.parent.removeChild(getElementbyID(this.id));
 	}
 
     /**
@@ -674,7 +693,7 @@ class asEngine{
 
    constructor(width,height,id,reset){
         if(!id && setup_ran && !reset) throw new Error("Setup already ran! You need to assign an id or use reset to delete!");
-        if(setup_ran){ document.getElementById("canvasHolder").innerHTML="";
+        if(setup_ran){ getElementbyID("canvasHolder").innerHTML="";
         }else{
             let canvasHolder=new eDiv("canvasHolder");
         }
@@ -1078,6 +1097,11 @@ const angle_mode= function(_mode){
 const log=function(str){
     console.log(str);
 }
+
+/**
+ * Console.clear code shortening
+ */
+const cClear=function(){ console.clear(); }
 
 // ********************************************************************************************************
 //									     	        Colors
