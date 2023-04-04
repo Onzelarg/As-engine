@@ -45,8 +45,25 @@ const cos=function(angle){
  * @returns - returns the found element in the document.
  */
 const getElementbyID=function(str){
-    let result=document.getElementById(str);
-    return result;
+    return document.getElementById(str);
+}
+
+/**
+ * Document.querySelector code shortening
+ * @param {string} str - the name to query
+ * @returns - returns the first found element by the query
+ */
+const querySelect=function(str){
+    return document.querySelector(str);
+}
+
+/**
+ * Document.querySelectorAll code shortening
+ * @param {string} str - the name to query
+ * @returns - returns all found element by the query
+ */
+const querySelectAll=function(str){
+    return document.querySelectorAll(str);
 }
 
 class domElements {
