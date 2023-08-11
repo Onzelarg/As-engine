@@ -66,6 +66,9 @@ const querySelectAll=function(str){
     return document.querySelectorAll(str);
 }
 
+// ******************************************* Dom elements
+// ************************************************************************************************************************
+
 class domElements {
     
     constructor(result,id,parent,str,_class){
@@ -124,6 +127,7 @@ class domElements {
     
     /**
      * Adds attribute to the element. Eg. width
+     * Use an array to set multiple attributes
      * @param {string} _attribute - name of the attribute
      * @param {string} values - value of the attribute
      */
@@ -220,7 +224,6 @@ class domElements {
      * Hides the element
      */
     hide(){
-        let d="display";
         if(this.element.style.length==0){
             this.add_style("display","none");
         }else{
@@ -244,8 +247,7 @@ class domElements {
       
 }
 
-// ******************************************* Dom elements
-// ************************************************************************************************************************
+
 class eDiv extends domElements{
     
     /**
@@ -436,7 +438,7 @@ class eCanvas extends domElements {
 		this.#draw();
     }
 
-    rectangle(x,y,width,height){
+    rectangle(x,y,width,height,lineWidth,color){
         if(x==undefined || y==undefined || width==undefined || height==undefined) throw new Error("Not enough paramaters to run!");
         this.ctx.beginPath();
         if(color)this.ctx.strokeStyle = color;
@@ -712,23 +714,26 @@ class asEngine{
         if(!id && setup_ran && !reset) throw new Error("Setup already ran! You need to assign an id or use reset to delete!");
         if(setup_ran){ getElementbyID("canvasHolder").innerHTML="";
         }else{
-            let canvasHolder=new eDiv("canvasHolder");
+            this.canvasHolder=new eDiv("canvasHolder","","","canvasHolder");
         }
         !width ? this.width=1280 : this.width=width;
         !height ? this.height=720 : this.height=height;
+        cssRoot.style.setProperty("--canvasWidth",this.width+"px");
+        cssRoot.style.setProperty("--canvasHeight",this.height+"px");
         this.parent=canvasHolder.id;
         let result=[];
         if(!id){
-            result[0]=new eCanvas("foreground",this.parent,"","canvas_foreground",this.width,this.height);
+            result[0]=new eCanvas("foreground",this.parent,"","canvasForeground",this.width,this.height);
             this.foreground=result[0];
-            result[1]=new eCanvas("background",this.parent,"","canvas_background",this.width,this.height);
+            result[1]=new eCanvas("background",this.parent,"","canvasBackground",this.width,this.height);
             this.background=result[1];
         }else{
-            result[0]=new eCanvas(id,this.parent,"","canvas_foreground",this.width,this.height);
+            result[0]=new eCanvas(id,this.parent,"","canvasForeground",this.width,this.height);
             this.foreground= result[0];
         }
         loop=false;
         this.framerate=30;   
+        
     }  
     
     get_framerate(amount){
@@ -772,6 +777,9 @@ var loop;
 var toDraw;
 var mouseX;
 var mouseY;
+
+var cssRoot=querySelect(':root');
+var cssComputedStyle=getComputedStyle(cssRoot);
 
 /**
  * Starts the engine. The engine will look for a draw function to run. 
@@ -937,12 +945,14 @@ const ellipse = function(x,y,radiusX,radiusY,rotation,lineWidth,color,startAngle
  * @param {Number} y - Starting Y position
  * @param {Number} width - Width of the rectangle
  * @param {Number} height - Height of the rectangle
+ * @param {Number} lineWidth - [optional] Linewidth for stroke 
+ * @param {string} color - [optional] color for the line
  * @param {Number} id - [optional] id of the canvas
  */
-const rectangle = function(x,y,width,height,id){
+const rectangle = function(x,y,width,height,lineWidth,color,id){
     if(!id) id=0;
     if(id=="background") id=1;
-    canvases[id].rectangle(x,y,width,height); 
+    canvases[id].rectangle(x,y,width,height,lineWidth,color); 
 }
 
 /**
@@ -1214,7 +1224,6 @@ const Violet="#8000FF";
 const Viridian="#40826D";
 const White="#FFFFFF";
 const Yellow="#FFFF00";
-
 
 
 
